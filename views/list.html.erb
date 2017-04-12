@@ -1,8 +1,40 @@
-<% title = session[:conf_list_include_past] ?
-     _('Registered conferences') :  _('Upcoming conferences') %>
-<%= link_to_login_or_new if @user.nil? %>
-<h1><%= title %></h1>
-<%= list_filters %>
+<h1><%= _('List of registered conferences') %></h1>
 <%= pagination_header @conferences %>
+<p><%= link_to _('Register a new conference'), :action => 'new' %></p>
 <%= will_paginate @conferences %>
-<%= conf_list_table @conferences %>
+<% table do %>
+  <% table_head_row do %>
+    <th><%= link_to _('ID'), :sort_by => 'conferences.id' %></th>
+    <th><%= link_to _('Name'), :sort_by => 'name' %></th>
+    <th><%= link_to _('Begins at'), :sort_by => 'begins desc' %></th>
+    <th><%= link_to _('Registration opens'),
+	              :sort_by => 'reg_open_date' %></th>
+    <th><%= _('Defined timeslots') %></th>
+    <th><%= _('Registered attendees') %></th>
+    <th><%= _('Homepage') %></th>
+    <th></th>
+  <% end %>
+  <% @conferences.each do |conf| %>
+    <% att_num = conf.people.size %>
+  <% table_row do %>
+    <td><%= link_to conf.id, :action => 'show', :id => conf %></td>
+    <td><%= link_to h(conf.name), :action => 'show', :id => conf %></td>
+    <td><%= conf.begins %></td>
+    <td><%= conf.reg_open_date %></td>
+    <td><%= link_to(conf.timeslots.size,
+                    {:action => 'timeslots', :id => conf} ) %></td>
+    <td><%= link_to_if(att_num > 0, att_num,
+                       { :action => 'people_list', :id => conf }) %></td>
+    <td><%= if !conf.homepage.blank?
+              link_to(_('Visit'), conf.homepage)
+            else
+              _'Not defined'
+            end %></td>
+    <td>
+      <%= link_to(_('Delete'), {:action => 'destroy', :id => conf},
+		  {:confirm => _("Are you sure you want to " +
+				 "permanently delete %s?") % conf.name,
+		    :method => :post}) %></td>
+  <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,36 @@
+<h1><%= _('Defined timeslots for %s') % @conference.name %></h1>
+
+<% if @tslots.empty? %>
+  <h3><%= _'No timeslots have yet been defined' %></h3>
+<% else %>
+  <%= pagination_header @tslots %>
+  <%= will_paginate @tslots %>
+  <% table do %>
+    <% table_head_row do %>
+      <th><%= _'Start time' %></th>
+      <th><%= _'Tolerance (pre)' %></th>
+      <th><%= _'Tolerance (post)' %></th>
+      <th><%= _'Attendances' %></th>
+      <th><%= _'Room' %></th>
+      <th></th>
+    <% end %>
+    <% @tslots.each do |tslot| %>
+      <%= row_for_timeslot_listing(tslot) %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<h3><%= _'Create a new timeslot for this conference' %></h3>
+<% tolerance_note = _('Enter the tolerance in <em>hh:mm:ss</em> format. If ' +
+		      'not specified, it will use the system-wide default (%s)')
+   comas_form_for :timeslot, @new_ts,
+                  :url => {:action => 'create_timeslot',
+                           :id => @conference.id} do |f| %>
+  <%= f.auto_field :start_time %>
+  <%= f.auto_field :tolerance_pre,
+               {:note => tolerance_note % Timeslot.default_tolerance_pre} %>
+  <%= f.auto_field :tolerance_post,
+               {:note => tolerance_note % Timeslot.default_tolerance_post} %>
+  <%= f.auto_field :room_id %>
+  <%= f.submit _'Create timeslot' %>
+<% end %>

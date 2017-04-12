@@ -1,31 +1,11 @@
-<% if @user %>
-  <div class="comas-for-admin">
-    <%= conf_edit_links(@conference) %>
-    <%= sign_up_person_for_conf_link(@user, @conference) %>
-  </div>
-<% else %>
-  <%= link_to_login_or_new %>
-<% end %>
-<h1><%= @conference.name %></h1>
+<h1><%= _("Edit conference data") %></h1>
+<%= render :partial => 'form',
+           :locals => {:action => 'show', :submit => _('Save changes')} %>
 
-<%= display_logo(@conference) %>
-
-<% if @props_to_show.size > 0 %>
-  <p><%= link_to(_('%d proposals registered for this conference') %
-                 @props_to_show.size,
-		 :action => 'proposals', :id => @conference) %></p>
-<% end %>
-
-<% if !@conference.homepage.blank? %>
-  <p><%= link_to _('Web site'), @conference.homepage %></p>
-<% end %>
-
-<%= RedCloth.new(@conference.descr).to_html %>
-
-<% collapsed_header _('Important dates') do %>
-  <%= date_details_for @conference  %>
-<% end %>
-
-<% @conference.extra_listable_attributes.each do |attr| %>
-  <%= auto_info_row_for @conference, attr %>
-<% end %>
+<h3><%= _('Timeslots management') %></h3>
+<p><%= (@conference.timeslots.size == 0 ?
+        _('No timeslots currently defined') :
+        _('%d currently defined timeslots') %
+	  @conference.timeslots.size) %> -
+  <%= link_to _('Edit timeslots for this conference'),
+              :action => 'timeslots', :id => @conference %></p>
