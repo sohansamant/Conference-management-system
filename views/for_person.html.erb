@@ -1,0 +1,39 @@
+<h1><%= _('Attendances for <em>%s</em> on <em>%s</em>') %
+	[h(@person.name), @conference.name] %></h1>
+
+<% table do %>
+  <% table_head_row do %>
+    <th><%= _'Session started at' %></th>
+    <th><%= _'Attendance taken at' %></th>
+    <th><%= _'Proposal' %></th>
+  <% end %>
+  <% @attendances.sort_by(&:created_at).each do |att| %>
+    <% table_row do %>
+      <td><%= link_to att.timeslot.start_time.to_s(:listing),
+                      :action => 'att_by_tslot',
+                      :timeslot_id => att.timeslot,
+                      :conference_id => @conference %></td>
+      <td><%= att.created_at.to_s(:listing) %></td>
+      <td><%= link_to_proposal att.timeslot.proposal %></td>
+    <% end %>
+  <% end %>
+<% end %>
+
+<h3><%= _('Create certificate') %></h3>
+<% if @formats.empty? %>
+  <p><%= _('No certificate formats are yet defined. Please %s') %
+         link_to(_('define one first'),
+                 :action => 'certif_formats_list') %></p>
+<% else %>
+  <p><%= _('Select which format to generate the certificate with') %></p>
+  <ul>
+    <% @formats.each do |fmt| %>
+      <li><%= link_to(fmt.name,
+               :controller => 'certificates_adm',
+               :action => 'for_person',
+               :person_id => @person, :conference_id => @conference,
+               :id => fmt) %>
+        <%= human_paper_size(fmt.paper_size)%></li>
+    <% end %>
+  </ul>
+<% end %>

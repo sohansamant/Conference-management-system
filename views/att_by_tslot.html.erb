@@ -1,0 +1,25 @@
+<h1><%= _('Attendance listing by timeslot') %></h1>
+
+<p><%= _('Attendances for the session started at <em>%s</em>, room ' +
+         '<em>%s</em> (%s)') %
+         [ @tslot.start_time.to_s(:listing), @tslot.room.name,
+           ( @tslot.proposal.nil? ? _('No proposal defined') :
+             link_to_proposal(@tslot.proposal))] %></p>
+<%= pagination_header(@attendances) %>
+<%= will_paginate @attendances %>
+
+<% table do %>
+  <% table_head_row do %>
+    <th><%= _'Attendee' %></th>
+    <th><%= _'Registration time' %></th>
+  <% end %>
+  <% @attendances.each do |att| %>
+    <% table_row do %>
+      <td><%= link_to att.person.name,
+                      :action => 'for_person',
+                      :person_id => att.person,
+                      :conference_id => @conference %></td>
+      <td><%= att.created_at.localtime.strftime('%d/%m/%Y %H:%M:%S') %></td>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,23 @@
+<h3><%= _('%d attendances: %d people (exact), %d people (including higher)') %
+        [num, list.size, or_higher] %> -
+    <%= link_to_function(_('Show'),
+                    visual_effect(:toggle_blind, "#{num}-att")) %> -
+    <%= link_to(_('Generate certificates'),
+	        :action => 'certificates_by_attendances',
+                :conference_id => @conference,
+                :min_attend => num) %>
+</h3>
+
+<div id="<%= num %>-att" style="display: none">
+  <% table do %>
+    <% table_head_row do %>
+      <th><%= _'Name' %></th>
+    <% end %>
+    <% list.sort_by {|p| p.name.downcase}.each do |person| %>
+      <% table_row do %>
+        <td><%= link_to(h(person.name), :action => 'for_person',
+                        :person_id => person, :conference_id => @conference) %></td>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

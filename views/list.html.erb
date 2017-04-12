@@ -1,0 +1,9 @@
+<h1><%= _('Available certificate formats') %></h1>
+
+<%= pagination_header @formats %>
+<%= will_paginate @formats %>
+<%= render :partial => 'details',
+           :locals => {:formats => @formats,
+                       :edit_fmt => @new_fmt,
+                       :action => 'new',
+                       :label =>  _('Create')} %>
