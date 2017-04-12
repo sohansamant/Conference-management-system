@@ -1,0 +1,22 @@
+<%= link_to_login_or_new %>
+<h1><%= _('Proposals for %s') % @conference.name %></h1>
+
+<%= pagination_header @props %>
+<%= will_paginate @props %>
+<% table do %>
+  <% table_head_row do %>
+    <th><%= _'Title' %></th>
+    <th><%= _'Authors' %></th>
+    <th><%= _'Proposal type' %></th>
+    <th><%= _'Proposal status' %></th>
+  <% end %>
+  <% @props.each do |prop| %>
+    <% table_row do %>
+      <td><%= link_to(h(prop.title), :controller => 'proposals',
+	              :action => 'show', :id => prop)%></td>
+      <td><%= authors_list_for_proposal(prop).join('<br/>') %></td>
+      <td><%= prop.prop_type.name %></td>
+      <td><%= prop.status_name %></td>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,9 +1,8 @@
-<h1><%= _('Available certificate formats') %></h1>
-
-<%= pagination_header @formats %>
-<%= will_paginate @formats %>
-<%= render :partial => 'details',
-           :locals => {:formats => @formats,
-                       :edit_fmt => @new_fmt,
-                       :action => 'new',
-                       :label =>  _('Create')} %>
+<% title = session[:conf_list_include_past] ?
+     _('Registered conferences') :  _('Upcoming conferences') %>
+<%= link_to_login_or_new if @user.nil? %>
+<h1><%= title %></h1>
+<%= list_filters %>
+<%= pagination_header @conferences %>
+<%= will_paginate @conferences %>
+<%= conf_list_table @conferences %>
