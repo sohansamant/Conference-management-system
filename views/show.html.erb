@@ -1,11 +1,59 @@
-<h1><%= _("Edit conference data") %></h1>
-<%= render :partial => 'form',
-           :locals => {:action => 'show', :submit => _('Save changes')} %>
+<%= link_to_login_or_new %>
+<h1><%=h @proposal.title %></h1>
+<% if @can_edit %>
+  <p><%= link_to _('Edit'), :action => 'edit', :id => @proposal %></p>
+<% end %>
 
-<h3><%= _('Timeslots management') %></h3>
-<p><%= (@conference.timeslots.size == 0 ?
-        _('No timeslots currently defined') :
-        _('%d currently defined timeslots') %
-	  @conference.timeslots.size) %> -
-  <%= link_to _('Edit timeslots for this conference'),
-              :action => 'timeslots', :id => @conference %></p>
+<%= info_row _('Submitted for'), @proposal.conference.name %>
+<%= info_row _('Proposal type'), @proposal.prop_type.name %>
+<%= redcloth_info_row _('Abstract'), @proposal.abstract %>
+<% @proposal.extra_listable_attributes.each do |attr| %>
+  <%= auto_info_row_for @proposal, attr %>
+<% end %>
+<% if tslot = @proposal.timeslot %>
+  <%= info_row _('Room'), tslot.room.name %>
+  <%= info_row _('Start time'), tslot.start_time %>
+<% end %>
+
+<h3><%= _'Authors' %></h3>
+<% if @can_edit %>
+  <p><%= link_to _('Manage authors'), :action => 'authors', :id => @proposal %></p>
+<% end %>
+
+<ul>
+<% authors_list_for_proposal(@proposal).each do |author| %>
+  <li><%= author %></li>
+<% end %>
+</ul>
+
+<h3><%= _'Documents' %></h3>
+
+<% if @proposal.documents.empty? %>
+  <p><%= _'There are no files for this proposal' %></p>
+<% end %>
+
+<ul>
+<% @proposal.documents.each do |doc| %>
+  <li><%= link_to_document(doc, @can_edit) %></li>
+<% end %>
+</ul>
+
+<% if @can_edit %>
+  <h3><%= _'Upload a new document' %></h3>
+  <% form_tag(url_for(:action => 'new_document', :id => @proposal),
+              :multipart => true) do %>
+    <div class="info-row">
+      <span class="info-title"><%= _('Choose the file to upload') %></span>
+      <span class="info-data"><%= file_field_tag(:data) %></span>
+    </div>
+    <div class="info-row">
+      <span class="info-title"><%= _('File description') %></span>
+      <span class="info-data">
+	<%= text_field_tag(:descr, '', :size =>70) %>
+      </span>
+    </div>
+    <div class="info-row">
+      <span class="info-data"><%= submit_tag(_'Upload') %></span>
+    </div>
+  <% end %>
+<% end %>

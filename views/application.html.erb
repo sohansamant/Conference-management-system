@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  <% if defined? Locale %>
+    <% bindtextdomain('comas') %>
+    xml:lang="<%= Locale.get %>" lang="<%= Locale.get %>"
+  <% end %> >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<%  headers["Content-Type"] = "text/html; charset=utf-8" %>
+<%= stylesheet_link_tag('comas.css', 'comas_layout.css',
+			'calendar.css') %>
+<%= rss_links %>
+
+<title><%= @title %></title>
+<%= javascript_include_tag :all, :cache => true %>
+</head>
+<body>
+  <div id="header"><%= @title %>
+    <div id="locales"><%= locale_links %></div>
+  </div>
+  <div id="menu"><%= @menu %></div>
+  <div id="main">
+    <%= login_data %>
+    <%= show_flash %>
+    <div id="contents"><%= yield %></div>
+  </div>
+<div id="footer"><%= @footer %></div>
+</body>
+</html>
+

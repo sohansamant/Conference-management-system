@@ -1,0 +1,41 @@
+<h1><%= _('Welcome, %s (ID: %d)') % [@user.name, @user.id] %></h1>
+
+<div id="my-upcoming">
+  <% if !@mine.empty? %>
+    <h3><%= _'Next conferences you are signed up for' %></h3>
+    <%= conf_list_table @mine %>
+  <% else %>
+    <p><%= _('You are currently not registered for any upcoming ' +
+	     'conferences. You can %s and sign up.') %
+	   link_to(_('go to the list of upcoming conferences'),
+	           :controller => 'conferences', :action => 'list')
+%></p>
+  <% end %>
+</div>
+
+<% if @link_to_nametag %>
+  <div id="print-nametag">
+    <h3><%= _('Print your nametag') %></h3>
+    <p><%= _('For your convenience, you can %s. This will save you ' +
+	     'time upon arriving to the conference, where you will be ' +
+	     'able to present it for identification and for ' +
+	     'attendance tracking.' ) %
+	   link_to(_('print your nametag'), :action => 'my_nametag') %></p>
+    <p><%= _('You will be able to use this nametag for any of the ' +
+	     'conferences organized by us.') %></p>
+  </div>
+<% end %>
+
+<% if @can_define_nametag %>
+  <div class="comas-for-admin">
+    <p><%= _('In order to define or change a nametag format, %s and ' +
+	     'register its name as the ' +
+	     '<tt>%s</tt> key in the %s interface') %
+	   [link_to(_('define a suitable format'),
+	            :controller => 'certificates_adm', :action => 'list'),
+            'personal_nametag_format',
+            link_to(_('Configuration entries'),
+                    :controller => 'sys_conf_adm', :action => 'list')
+           ]%></p>
+  </div>
+<% end %>

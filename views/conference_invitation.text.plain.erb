@@ -1,0 +1,24 @@
+<%= @invitation_text %>
+
+---------------------------------------
+<%= _('This is an auto-generated mail, sent by the conference administration
+system for %s.') % @conference %>
+
+<%= _('The reason you are getting this mail is because %s
+(a registered user for this conference) considered it could be
+interesting for you.') % @sender_name %>
+
+<%= _('If you want to accept this invitation, please click on the
+following link: ') %>
+
+<%= @invitation_url %>
+
+<%= _'For further information on the conference, please enter:' %>
+
+<%= @conference_url %>
+
+<%= _('In case you are interested, you can register for it by creating an
+account, by clicking on the "%s" link.') % _('New account') %>
+
+<%= _('If you want to directly contact %s, the registered mail address
+is %s.') % [@sender_name, @sender_email] %>

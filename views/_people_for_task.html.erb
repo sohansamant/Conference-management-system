@@ -1,0 +1,16 @@
+<% table do %>
+  <% table_head_row do %>
+    <th><%= _'ID' %></th>
+    <th><%= _'Login' %></th>
+    <th><%= _'First name' %></th>
+    <th><%= _'Family name' %></th>
+  <% end %>
+  <% task.people.sort_by {|p| p.id}.map do |person| %>
+    <% table_row do %>
+      <% %w(id login firstname famname).each do |col| %>
+        <td><%= link_to(h(person.send(col)),
+                        :action => :show, :id => person) %></td>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

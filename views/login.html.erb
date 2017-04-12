@@ -1,0 +1,20 @@
+<%= text_for_invite(@invite) %>
+
+<div id="loginreq">
+<% form_tag url_for(:action => 'validate') do %>
+<p><%= _'User name' %>:
+  <%= text_field_tag 'login', params[:login], :size => 20 %></p>
+
+<p><%= _'Password' %>:
+  <%= password_field_tag 'passwd', nil, :size => 20 %></p>
+
+<%= hidden_field_tag('invite', @invite.link) if @invite %>
+
+<p><%= submit_tag _('Log in') %></p>
+<% end %>
+</div>
+<script language="JavaScript">
+  document.getElementById("login").focus()
+</script>
+<p><%= _'Cannot log in?' %>
+  <%= link_to _('Request a new password'), :action => 'request_passwd' %></p>

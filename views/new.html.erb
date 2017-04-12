@@ -1,3 +1,8 @@
-<h1><%= _("Create a new conference") %></h1>
-<%= render :partial => 'form',
-           :locals => {:action => 'create', :submit => _('Create')} %>
+<h1><%= _'Submit a new proposal' %></h1>
+
+<%= render(:partial => 'form',
+           :locals => {:proposal => @proposal,
+                       :action => 'create',
+                       :choose_confs => true,
+                       :confs => @confs,
+                       :submit_label => _('Register proposal') }) %>
